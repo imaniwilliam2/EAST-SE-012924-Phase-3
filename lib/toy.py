@@ -1,13 +1,29 @@
 import ipdb
 
 class Toy:
+
+
+    all = []
     
-    def __init__(self, size, color = "red"):
+
+    def __init__(self, size, nickname, color = "red"):
         self.size = size
         self.color = color
+        self.nickname = nickname
+        # Creating ID's
+        if(len(Toy.all) == 0):
+            self.id = 1
+        else:
+            self.id = Toy.all[-1].id + 1
+
+
+        Toy.all.append(self)
+
 
     def make_sound(self):
         print("I am a toy! Yay!")
+
+    # Using GET/SET 
 
     def get_size(self):
         return self._size
@@ -18,6 +34,7 @@ class Toy:
         else:
             raise ValueError("Size must be a string with the value of small, medium, or large!")
         
+    # Using Propery Decorator
     @property
     def color(self):
         return self._color
@@ -29,11 +46,34 @@ class Toy:
         else:
             raise ValueError("Color must be a string with the value of red, blue, or green")
     
+    # GET/SET
     size = property(get_size, set_size)
 
-    def __repr__(self):
-        return f"Toy object - Size: {self.size}, Color: {self.color}"
 
-toy1 = Toy("medium")
-toy2 = Toy("large", "blue")
+    @property
+    def nickname(self):
+        return self._nickname
+    
+    @nickname.setter
+    def nickname(self, nickname_parameter):
+        if (not hasattr(self, 'nickname')):
+            self._nickname = nickname_parameter
+        else:
+            raise Exception('Cannot change the nickname for a Toy!')
+    
+
+    @classmethod
+    def get_toy_nicknames(cls):
+        toy_nicknames = [toy.nickname for toy in cls.all]
+        return toy_nicknames
+        
+        
+
+    def __repr__(self):
+        return f"Toy #{self.id} - Size: {self.size}, Nickname:{self.nickname}, Color: {self.color}"
+    
+
+
+toy1 = Toy("medium", "Woody")
+toy2 = Toy("large", "Buzz", "blue")
 ipdb.set_trace()
